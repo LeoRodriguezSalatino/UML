@@ -93,14 +93,15 @@ public class Asteroide{
 		setDireccion(direccion);
 	}
 }`;
+
 function cargar(params) {
 	
 cuadros = [];
 codigo = '';
 codigo = document.querySelector('#codigo').value;
-// console.log(codigo);
+
 let lineas = codigo.split('\n');
-// console.log(clase(lineas[0]));
+
 let ignorar = false;
 lineas.forEach(linea => {
 	if (ignorar){
@@ -109,7 +110,7 @@ lineas.forEach(linea => {
 			return null;
 		}
 	}else if (!ignorar){
-		linea = borrarT(linea);
+		// linea = borrarT(linea);
     	if (linea.includes('class')) clase(linea);
     	else if ((linea.includes('private'))||linea.includes('public')){
 			if (linea.includes('(')) propiedad(linea, 2);
@@ -196,13 +197,19 @@ document.querySelector('form').addEventListener('submit', e => {
 	e.preventDefault();
 });
 
-document.querySelector('#crear').addEventListener('click', e => {
+document.querySelector('#modelar').addEventListener('click', e => {
 	e.preventDefault();
 	// console.log(cuadros[0][1]);
-	uml();	
+	if (document.querySelector('textarea').value === '') alert('Sin códigoooo');
+	else uml();	
 });
 
 document.querySelector('#reset').addEventListener('click', e => {
+	e.preventDefault();
+	document.querySelector('textarea').value = '';	
+})
+
+document.querySelector('#borrarUML').addEventListener('click', e => {
 	e.preventDefault();
 	document.querySelector('textarea').value = '';
 	document.querySelector('.tablas').innerHTML = '';	
