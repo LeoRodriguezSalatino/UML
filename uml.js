@@ -93,7 +93,10 @@ public class Asteroide{
 		setDireccion(direccion);
 	}
 }`;
-
+function cargar(params) {
+	
+cuadros = [];
+codigo = '';
 codigo = document.querySelector('#codigo').value;
 // console.log(codigo);
 let lineas = codigo.split('\n');
@@ -115,6 +118,7 @@ lineas.forEach(linea => {
 	}  
 	// console.table(cuadros);
 })
+}
 
 function clase(linea) {
 	cuadros.push([]);
@@ -174,6 +178,7 @@ function dibujarCuadro(objeto) {
 }
 
 function uml(parms) {
+	cargar();
 	cuadros.forEach(cuadro => dibujarCuadro(cuadro));	
 }
 
