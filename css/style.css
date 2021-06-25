@@ -1,8 +1,16 @@
 .tablas{
     display: flex;
-    gap: 5px;  
+    gap: 5px; 
+    flex-wrap: wrap;
+    align-items: flex-start; 
 }
-table, tr{
-    border: 1px solid black;
+table, th{
+    border: 2px solid black;
     border-collapse: collapse;
+}
+th{
+    font-size: 20px;
+}
+hr{
+    border: 1px solid black;
 }
