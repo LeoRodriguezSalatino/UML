@@ -186,6 +186,11 @@ function borrarT(linea) {
 	return linea;
 }
 
+
+document.querySelector('form').addEventListener('submit', e => {
+	e.preventDefault();
+});
+
 document.querySelector('#crear').addEventListener('click', e => {
 	e.preventDefault();
 	// console.log(cuadros[0][1]);
