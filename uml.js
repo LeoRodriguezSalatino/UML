@@ -245,3 +245,69 @@ document.querySelector('#borrarUML').addEventListener('click', e => {
 	document.querySelector('textarea').value = '';
 	document.querySelector('.tablas').innerHTML = '';	
 })
+
+document.querySelector('#ej').addEventListener('click', e => {
+	e.preventDefault();
+	
+	document.querySelector('textarea').value = `
+	public class Cliente{
+		private Integer numCliente;
+		private String apellido;
+		private Integer DNI;
+		private Integer CUIT;
+	
+		public Cliente(Integer numCliente, String apellido, Integer DNI, Integer CUIT){
+			
+			this.numCliente = numCliente;
+			this.apellido = apellido;
+			this.DNI = DNI;
+			this.CUIT = CUIT;
+		}
+	}
+	
+	public abstract class Cuenta{
+		private Integer numCta;
+		private Double saldo;
+	
+		public Cuenta(Integer numCta, Double saldo){
+			this.numCta = numCta;
+			this.saldo = saldo;
+		}
+	
+		public void depositar(Double monto){
+			saldo += monto;
+		}
+		public abstract void extraerEfectivo(Double monto){
+			if ((saldo - monto)>=0) saldo -= monto;
+		}
+		public Double informarSaldo(){
+			return saldo;
+		}
+	}
+	
+	public class CajaAhorro extends Cuenta{
+		private Double tasaInteres;
+	
+		public CajaAhorro(Integer numCta, Double saldo, Double tasaInteres){
+			super(numCta, saldo);
+			this.tasaInteres = tasaInteres;
+		}
+		public void cobrarInteres(){
+			saldo += tasaInteres*saldo;
+		}
+	}
+	
+	public class CtaCte extends Cuenta{
+		private Double descubierto;
+	
+		public CtaCte(Integer numCta, Double saldo, Double descubierto){
+			super(numCta, saldo);
+			this.descubierto = descubierto;
+		}
+		@override
+		public void extraerEfectivo(Double monto){
+			if (((saldo+descubierto) - monto)>=0) saldo -= monto;
+		}
+	}
+	`;
+})
