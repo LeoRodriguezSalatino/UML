@@ -171,16 +171,22 @@ function propiedad(linea, m) {
 	}
 	
 	// cuadros[n][m][b].tipo = linea.substring(0, linea.search(' '));
-	// if (m === 1 || linea.search('()'))
+	if (m === 1 || linea.includes('()'))
 		cuadros[n][m][b].nombre = linea.substring(linea.search(' ')+1, linea.length-1);
-	// else {
-	// 	linea = linea.substring(linea.search(' ')+1, linea.length-1);
-	// 	cuadros[n][m][b].nombre = linea.substring(0, ((m === 1) ? linea.length : linea.indexOf('(')));
-	
-	// 	if (m === 2){
+	else {
+		linea = linea.substring(linea.search(' ')+1, linea.length-1);
+		cuadros[n][m][b].nombre = linea.substring(0, ((m === 1) ? linea.length : linea.indexOf('(')));
+		
+		linea = linea.substring(linea.indexOf('(')+1, linea.length-1);
+		let aux = linea.replace(/,/g, '').split(' ');
+		let aux2 = '';
 
-	// 	}	
-	// }
+		for(let i = 0; i < aux.length; i += 2){
+			aux2 += `${aux[i+1]}:${aux[i]}, `;
+		}
+
+		cuadros[n][m][b].parametros = aux2.substring(0, aux2.length-2);
+	}
 	
 	
 }
@@ -196,7 +202,7 @@ function dibujarCuadro(objeto) {
  		</tr>`;  
 	objeto[1].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${linea.nombre}:${linea.tipo}</td></tr>`);
 	aux +=	`<tr><td><hr></td></tr>`
-	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${(linea.abstracto) ? 'abstract ' : ''}${linea.nombre}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
+	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${(linea.abstracto) ? 'abstract ' : ''}${linea.nombre}${(linea.parametros) ? `(${linea.parametros})` : ''}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
 	aux +=`</table>`;
 	document.querySelector('.tablas').innerHTML += aux;
 }
