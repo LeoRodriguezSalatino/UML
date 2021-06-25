@@ -19,8 +19,21 @@ th{
 hr{
     border: 1px solid black;
 }
-p{
+.abstract{
     margin: 0px;
     font-weight: normal;
     font-size: 15px;
+}
+textarea{
+    border-radius: 15px;
+}
+p{
+    margin: 0px;
+}
+.padre{
+    margin: 0px;
+    padding: 0px;
+    /* display: inline-block; */
+    font-size: 13px;
+    text-align: right;
 }
