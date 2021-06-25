@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>LopiBot</title>
+</head>
+<body>
+    <section>
+        <form action="">
+        <textarea name="codigo" id="codigo" cols="30" rows="10">
+            public class Objeto{
+                private int posx;
+                private int posy;
+                private char direccion;
+            
+                public Objeto(int x, int y, char direccion){
+                    posx = x;
+                    posy = y;
+                    this.direccion = direccion;
+                }
+            
+                public void setPosx(int x){
+                    posx = x;
+                }
+                public void setPosy(int y){
+                    posy = y;
+                }
+                public void setDireccion(int direccion){
+                    this.direccion = direccion;
+                }
+            
+                public int getPosx(){
+                    return posx;
+                }
+                public int getPosy(){
+                    return posy;
+                }
+                public char getDireccion(){
+                    return direccion;
+                }
+            
+                public void irA(int x, int y, char direccion){
+                    posx = x;
+                    posy = y;
+                    this.direccion = direccion;
+                }
+            }
+            
+            public class Nave extends Objeto{
+                private Double velocidad;
+                private int vida;
+                
+                public Nave(int x, int y, char direccion, Double 	velocidad){
+                    super(x, y, direccion);
+                    this.velocidad = velocidad;
+                }
+                
+                public void setVida(int vida){
+                    this.vida = vida;
+                }
+                public int getVida(){
+                    return vida;
+                }
+                @Overrride
+                //no se si van this en los set y get
+                public void irA(int x, int y, char direccion){
+                    if (getDireccion() != direccion) girar(direccion);
+                    setPosx(x);
+                    setPosy(y);
+                }
+                public void girar(char direccion){
+                    setDireccion(direccion);
+                }
+                public void restaVida(int valor){
+                    setVida(GetVida() - valor);
+                }
+            }
+            
+            public class Asteroide{
+                private int lesion;
+            
+                public Asteroide(int x, int y, char direccion, int lesion){
+                    super(x, y, direccion);
+                    this.lesion = lesion;	
+                }
+                // al pedo este mepa????
+                @Overrride
+                public void irA(int x, int y, char direccion){
+                    setPosx(x);
+                    setPosy(y);
+                    setDireccion(direccion);
+                }
+            }`      
+        </textarea>
+        <button type="reset">Resetear</button>
+        <button id="crear">Crear</button>
+    </form>
+    </section>
+    <section class="tablas"></section>
+    <script src="uml.js"></script>
+</body>
+</html>
