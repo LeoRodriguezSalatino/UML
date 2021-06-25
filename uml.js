@@ -170,9 +170,9 @@ function dibujarCuadro(objeto) {
 		<tr>
     		<th>${objeto[0].nombre}</th>
  		</tr>`;  
-	objeto[1].forEach((linea) => aux += `<tr><td>${(linea.p = 'private') ? '-' : '+'} ${linea.nombre}:${linea.tipo}</td></tr>`);
+	objeto[1].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${linea.nombre}:${linea.tipo}</td></tr>`);
 	aux +=	`<tr><td><hr></td></tr>`
-	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p = 'private') ? '-' : '+'} ${linea.nombre}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
+	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${linea.nombre}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
 	aux +=`</table>`;
 	document.querySelector('.tablas').innerHTML += aux;
 }
