@@ -1,3 +1,8 @@
 .tablas{
     display: flex;
+    gap: 5px;  
+}
+table, tr{
+    border: 1px solid black;
+    border-collapse: collapse;
 }

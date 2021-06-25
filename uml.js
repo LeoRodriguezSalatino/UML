@@ -139,18 +139,21 @@ function clase(linea) {
 }
 
 function propiedad(linea, m) {
-	if (m === 2) console.log(linea);
+	// if (m === 2) console.log(linea);
 	if (m === 2 && linea.includes('{')) ignorar = true;
 	let n = cuadros.length-1;
 	
 	cuadros[n][m].push(new Object());
 
 	b = cuadros[n][m].length - 1;
-	// cuadros[n][m][b].p 
-	cuadros[n][m][b].p = linea.substring(0, linea.search(' '));
+	
+	linea = linea.substring(linea.search('p'), linea.length)
+	cuadros[n][m][b].p = linea.substring(linea, linea.search(' '));
 
+	if (b > 0) {
 	linea = linea.substring(linea.search(' ')+1, linea.length);
 	cuadros[n][m][b].tipo = linea.substring(0, linea.search(' '));
+	}
 
 	cuadros[n][m][b].nombre = linea.substring(linea.search(' ')+1, linea.length-1);
 	// console.log(cuadros[n][m]);	
@@ -164,8 +167,8 @@ function dibujarCuadro(objeto) {
     		<th>${objeto[0].nombre}</th>
  		</tr>`;  
 	objeto[1].forEach((linea) => aux += `<tr><td>${(linea.p = 'private') ? '-' : '+'} ${linea.nombre}:${linea.tipo}</td></tr>`);
-	aux +=	`<tr><td><hr></td></tr>`
-	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p = 'private') ? '-' : '+'} ${linea.tipo}:${linea.nombre}</td></tr>`);
+	aux +=	`<tr><td> </td></tr>`
+	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p = 'private') ? '-' : '+'} ${linea.nombre}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
 	aux +=`</table>`;
 	document.querySelector('.tablas').innerHTML += aux;
 }
@@ -185,6 +188,12 @@ function borrarT(linea) {
 
 document.querySelector('#crear').addEventListener('click', e => {
 	e.preventDefault();
-	console.log(cuadros[0][1]);
+	// console.log(cuadros[0][1]);
 	uml();	
+});
+
+document.querySelector('#reset').addEventListener('click', e => {
+	e.preventDefault();
+	document.querySelector('textarea').value = '';
+	document.querySelector('.tablas').innerHTML = '';	
 })
