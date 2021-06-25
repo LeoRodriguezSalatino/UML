@@ -1,3 +1,8 @@
+*{
+    box-sizing: border-box;
+    /* padding: 0px; */
+    /* margin: 0px; */
+}
 .tablas{
     display: flex;
     gap: 5px; 
@@ -13,4 +18,9 @@ th{
 }
 hr{
     border: 1px solid black;
+}
+p{
+    margin: 0px;
+    font-weight: normal;
+    font-size: 15px;
 }

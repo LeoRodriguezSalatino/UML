@@ -145,7 +145,7 @@ function clase(linea) {
 
 function propiedad(linea, m) {
 	// if (m === 2) console.log(linea);
-	if (m === 2 && linea.includes('{')) ignorar = true;
+	if (m === 2 && linea.includes('{') && !linea.includes('}')) ignorar = true;
 	let n = cuadros.length-1;
 	
 	cuadros[n][m].push(new Object());
@@ -155,25 +155,29 @@ function propiedad(linea, m) {
 	linea = linea.substring(linea.search('p'), linea.length)
 	cuadros[n][m][b].p = linea.substring(linea, linea.search(' '));
 
+	if (m === 2 && linea.includes('abstract')){
+		cuadros[n][m][b].abstracto = true;
+		linea = linea.substring(0, linea.search('abstract')-1)+linea.substring(linea.search('abstract') + 'abstract'.length, linea.length);
+	}
+
 	if (b > 0) {
 	linea = linea.substring(linea.search(' ')+1, linea.length);
 	cuadros[n][m][b].tipo = linea.substring(0, linea.search(' '));
 	}
 
-	cuadros[n][m][b].nombre = linea.substring(linea.search(' ')+1, linea.length-1);
-	// console.log(cuadros[n][m]);	
+	cuadros[n][m][b].nombre = linea.substring(linea.search(' ')+1, linea.length-1);	
 }
 
-// console.log(cuadros[0][1]);
 function dibujarCuadro(objeto) {
 	let aux = `
 	<table class="default" >
 		<tr>
-    		<th>${objeto[0].nombre}</th>
+			<th>${(objeto[0].abstracto) ? '<p>«abstract»</p>' : ''}
+			${objeto[0].nombre}</th>
  		</tr>`;  
 	objeto[1].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${linea.nombre}:${linea.tipo}</td></tr>`);
 	aux +=	`<tr><td><hr></td></tr>`
-	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${linea.nombre}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
+	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${(linea.abstracto) ? 'abstract ' : ''}${linea.nombre}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
 	aux +=`</table>`;
 	document.querySelector('.tablas').innerHTML += aux;
 }

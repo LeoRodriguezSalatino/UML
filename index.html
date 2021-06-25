@@ -14,89 +14,65 @@
 
         <form action="">
         <textarea name="codigo" id="codigo" cols="70" rows="20">
-            public class Objeto{
-                private int posx;
-                private int posy;
-                private char direccion;
+            public class Cliente{
+                private Integer numCliente;
+                private String apellido;
+                private Integer DNI;
+                private Integer CUIT;
             
-                public Objeto(int x, int y, char direccion){
-                    posx = x;
-                    posy = y;
-                    this.direccion = direccion;
-                }
-            
-                public void setPosx(int x){
-                    posx = x;
-                }
-                public void setPosy(int y){
-                    posy = y;
-                }
-                public void setDireccion(int direccion){
-                    this.direccion = direccion;
-                }
-            
-                public int getPosx(){
-                    return posx;
-                }
-                public int getPosy(){
-                    return posy;
-                }
-                public char getDireccion(){
-                    return direccion;
-                }
-            
-                public void irA(int x, int y, char direccion){
-                    posx = x;
-                    posy = y;
-                    this.direccion = direccion;
+                public Cliente(Integer numCliente, String apellido, Integer DNI, Integer CUIT){
+                    
+                    this.numCliente = numCliente;
+                    this.apellido = apellido;
+                    this.DNI = DNI;
+                    this.CUIT = CUIT;
                 }
             }
             
-            public class Nave extends Objeto{
-                private Double velocidad;
-                private int vida;
-                
-                public Nave(int x, int y, char direccion, Double 	velocidad){
-                    super(x, y, direccion);
-                    this.velocidad = velocidad;
+            public abstract class Cuenta{
+                private Integer numCta;
+                private Double saldo;
+            
+                public Cuenta(Integer numCta, Double saldo){
+                    this.numCta = numCta;
+                    this.saldo = saldo;
                 }
-                
-                public void setVida(int vida){
-                    this.vida = vida;
+            
+                public void depositar(Double monto){
+                    saldo += monto;
                 }
-                public int getVida(){
-                    return vida;
+                public abstract void extraerEfectivo(Double monto){
+                    if ((saldo - monto)>=0) saldo -= monto;
                 }
-                @Overrride
-                //no se si van this en los set y get
-                public void irA(int x, int y, char direccion){
-                    if (getDireccion() != direccion) girar(direccion);
-                    setPosx(x);
-                    setPosy(y);
-                }
-                public void girar(char direccion){
-                    setDireccion(direccion);
-                }
-                public void restaVida(int valor){
-                    setVida(GetVida() - valor);
+                public Double informarSaldo(){
+                    return saldo;
                 }
             }
             
-            public class Asteroide{
-                private int lesion;
+            public class CajaAhorro extends Cuenta(){
+                private Double tasaInteres;
             
-                public Asteroide(int x, int y, char direccion, int lesion){
-                    super(x, y, direccion);
-                    this.lesion = lesion;	
+                public CajaAhorro(Integer numCta, Double saldo, Double tasaInteres){
+                    super(numCta, saldo);
+                    this.tasaInteres = tasaInteres;
                 }
-                // al pedo este mepa????
-                @Overrride
-                public void irA(int x, int y, char direccion){
-                    setPosx(x);
-                    setPosy(y);
-                    setDireccion(direccion);
+                public void cobrarInteres(){
+                    saldo += tasaInteres*saldo;
                 }
-            }         
+            }
+            
+            public class CtaCte extends Cuenta(){
+                private Double descubierto;
+            
+                public CtaCte(Integer numCta, Double saldo, Double descubierto){
+                    super(numCta, saldo);
+                    this.descubierto = descubierto;
+                }
+                @override
+                public void extraerEfectivo(Double monto){
+                    if (((saldo+descubierto) - monto)>=0) saldo -= monto;
+                }
+            }
         </textarea>
         <br>
         <button id="reset">Limpiar</button>
