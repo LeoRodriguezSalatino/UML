@@ -1,7 +1,6 @@
 // try{
 function borrarRow(e) {
-    // e.preventDefault();
-
+    console.log(e);
     e.target.parentNode.parentNode.removeChild(e.target.parentNode);
     document.querySelector('textarea').value = ej;
 };
@@ -13,10 +12,6 @@ function modificarRow(e) {
     // document.querySelector('textarea').value = ej;
 };
 
-document.querySelector('.in').addEventListener('keypress', (e) =>{
-    agregar(e);
-});
-
 function agregar(e) {
     if(e.key === "Enter"){
         let donde = e.target.id;
@@ -26,10 +21,13 @@ function agregar(e) {
         padre.innerHTML += 
         `<p class='${(donde === 'metodo') ? 'metodos' : 'propiedades'}' ondblclick="modificarRow()">${e.target.value}<input type="button" class='borrarRow ${donde}' value="X"></p>`; 
 
+        document.getElementById(donde).addEventListener('keypress', (e) =>{
+            agregar(e);	
+        })
         // listeners();
-        // document.querySelectorAll('.borrarRow.'+donde).forEach(boton => {
-            // boton.addEventListener('click', borrarRow);
-        // });
+        document.querySelectorAll('.borrarRow.'+donde).forEach(boton => {
+            boton.addEventListener('click', borrarRow);
+        });
         // document.querySelectorAll('td.'+donde+' p').forEach(p => {
         // 	p.addEventListener('dblclick', modificarRow);
         // });
@@ -40,14 +38,14 @@ function listeners() {
     let ins = document.querySelectorAll('.in');
     // console.log(ins);
     ins.forEach((in1) => {
-        // in1.addEventListener('keypress', agregar());		
+        in1.addEventListener('keypress', (e) =>{
+            agregar(e);	
+        })
     })
 }
 
-// listeners();
+listeners();
 let cuadros2 = [];
-
-// console.log(document.querySelectorAll('.in'));
 
 function agregarClase(e) {
     // e.preventDefault();
@@ -92,7 +90,6 @@ function agregarClase(e) {
         cuadros2[n].metodos.push(prop.innerText);
         padre.removeChild(prop);
     });
-    // console.log(cuadros2);
     aux += `</article>`;
 
     document.querySelector('.divCuadros').innerHTML += aux;
@@ -154,15 +151,25 @@ function codearPropiedad(p) {
     //definicion constructora
     let aux3 = '\n\t\tthis.'+nombre+' = '+nombre+';';
 
-    let aux4 = `\n\tpublic void set${nombre[0].toUpperCase()+nombre.slice(1)}(${nombre+':'+p.substring(p.search(':') + 1, p.length)+'){'}
+    let aux4 = `\n\tpublic void set${nombre[0].toUpperCase()+nombre.slice(1)}(${p.substring(p.search(':') + 1, p.length)+' '+nombre+'){'}
         \tthis.${nombre} = ${nombre};\n\t}
         public ${p.substring(p.search(':') + 1, p.length)} get${nombre[0].toUpperCase()+nombre.slice(1)}(){
-        \treturn ${nombre} = ${nombre};\n\t}`;
+        \treturn ${nombre};\n\t}`;
     return [aux, aux2, aux3, aux4]
 }
 
 function codearMetodo(m) {
-    return `\n\t${(m[0] === '-') ? 'private' : 'public'} ${m.substring(m.indexOf(')') + 2, m.length)} ${m.substring(m.search(' ') + 1, m.indexOf(')')+1)}{\n\t}`
+    let aux = m.substring(m.indexOf('(') + 1, m.indexOf(')'));//+', s:a';
+    aux = aux.split(',');
+
+    let aux2 = '';
+    for (let s of aux) {
+        s = s.trim().split(':');
+        aux2 += s[1]+' '+s[0]+', ';
+    }
+    aux2 = aux2.substring(0, aux2.length-2);
+
+    return `\n\t${(m[0] === '-') ? 'private' : 'public'} ${m.substring(m.indexOf(')') + 2, m.length)} ${m.substring(m.search(' ') + 1, m.indexOf('('))}(${aux2}){\n\t}`
 }
 
 // document.querySelector('.ejUml').addEventListener('click', ejUml);

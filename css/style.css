@@ -29,7 +29,6 @@ body{
     background-color: rgb(68, 99, 235);
   }
   
-  /* agregame desde js!! */
   .tablinks.active {
     background-color: rgb(125, 144, 224);
   }
@@ -73,6 +72,9 @@ hr{
 }
 .in{
     width: 100%;
+}
+.divCodigo{
+    margin-top: 15px;
 }
 textarea{
     border-radius: 15px;
