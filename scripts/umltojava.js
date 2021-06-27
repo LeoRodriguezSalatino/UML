@@ -109,7 +109,7 @@ function agregarClase(e) {
 
 function codear(e) {
     // e.preventDefault();
-
+    document.querySelector('#codigoJava').innerHTML = ''; 
     cuadros2.forEach(c => codearClase(c));
 }
 
@@ -138,10 +138,10 @@ function codearClase(c) {
     }
     // aux += c.propiedades.reduce((p, acum) => acum + codearPropiedad(p));
     // aux += c.metodos.reduce((m, acum) => acum + codearPropiedad(m));
-    aux += '\n}';
+    aux += '\n}\n\n';
     // console.log(aux);
     let codigo = document.querySelector('#codigoJava');
-    codigo.innerHTML = aux;
+    codigo.innerHTML += aux;
 }
 
 function codearPropiedad(p) {
@@ -178,6 +178,13 @@ function ejUml(e) {
 
     // document.querySelector('.ejUml').addEventListener('click', ejUml);
 };
+
+function borrar(e) {
+    cuadros2 = [];
+    document.querySelector('#codigoJava').innerHTML = '';
+    document.querySelector('.divCuadros').innerHTML = '';
+    document.querySelector('select').innerHTML = '<option value=""></option>';
+}
 
     // }catch (error) {console.error(error);}
     // function clase(linea) {
