@@ -1,5 +1,5 @@
 function openTab(event, tab) {
-	if (document.querySelector('.tab'+tab).classList.contains('hide')){
+	if (document.querySelector('.tab' + tab).classList.contains('hide')) {
 		document.querySelector('.tabJava').classList.toggle('hide');
 		document.querySelector('.tabUml').classList.toggle('hide');
 
@@ -18,134 +18,156 @@ clases = {
 variable = {
 	p: '',
 	tipo: '',
-	nombre: ''	
+	nombre: ''
 }
 
 let cuadros = [];
 let codigo = '';
 
 function cargar(params) {
-	
-cuadros = [];
-codigo = '';
-codigo = document.querySelector('#codigo').value;
 
-let lineas = codigo.split('\n');
+	cuadros = [];
+	codigo = '';
+	codigo = document.querySelector('#codigo').value;
 
-let ignorar = false;
-lineas.forEach(linea => {
-	if (ignorar){
-		if (linea.includes('}')) {
-			ignorar = false;
-			return null;
+	let lineas = codigo.split('\n');
+
+	let ignorar = false;
+	lineas.forEach(linea => {
+		if (ignorar) {
+			if (linea.includes('}')) {
+				ignorar = false;
+				return null;
+			}
+		} else if (!ignorar) {
+			// linea = borrarT(linea);
+			if (linea.includes('class')) clase(linea);
+			else if ((linea.includes('private')) || linea.includes('public')) {
+				if (linea.includes('(')) propiedad(linea, 2);
+				else propiedad(linea, 1);
+			}
 		}
-	}else if (!ignorar){
-		// linea = borrarT(linea);
-    	if (linea.includes('class')) clase(linea);
-    	else if ((linea.includes('private'))||linea.includes('public')){
-			if (linea.includes('(')) propiedad(linea, 2);
-			else propiedad(linea, 1);		 
-		}
-	}  
-})
+	})
 }
 
 function clase(linea) {
 	cuadros.push([]);
 
-	let n = cuadros.length-1;
+	let n = cuadros.length - 1;
 
 	cuadros[n].push(new Object());
 	cuadros[n].push([]);
-	
+
 	cuadros[n].push([]);
 
 	cuadros[n][0].p = linea.substring(0, linea.search(' '));
 	cuadros[n][0].abstracto = linea.includes('abstract');
 
 	linea = linea.substring(linea.search('class') + 6, linea.length);
-	cuadros[n][0].nombre = linea.substring(0, ((linea.search(' ') > 0) ? linea.search(' ')+1 : linea.search('{')));
+	cuadros[n][0].nombre = linea.substring(0, ((linea.search(' ') > 0) ? linea.search(' ') + 1 : linea.search('{')));
 
-	if (linea.includes('extends')){
-		cuadros[n][0].padre = linea.substring(linea.search('extends') +	7, linea.search('{'));
+	if (linea.includes('extends')) {
+		cuadros[n][0].padre = linea.substring(linea.search('extends') + 7, linea.search('{'));
 	}
 }
 
-function propiedad(linea, m) {	
-	if (m === 2){
+function propiedad(linea, m) {
+	if (m === 2) {
 		if (linea.includes('{') && !linea.includes('}')) ignorar = true;
 		if (linea.includes('Main')) return;
 		if (linea.includes('get') || linea.includes('set')) return;
 	}
-	let n = cuadros.length-1;
-	
-	cuadros[n][m].push(new Object());
+	let n = cuadros.length - 1;
+
+	b = cuadros[n][m].push(new Object());
 
 	b = cuadros[n][m].length - 1;
-	
-	linea = linea.substring(linea.search('p'), linea.length)
-	cuadros[n][m][b].p = linea.substring(linea, linea.search(' '));
+	linea = linea.trim();
 
-	if (m === 2 && linea.includes('abstract')){
+	//es metodo abstracto?
+	if (m === 2 && linea.includes('abstract')) {
 		cuadros[n][m][b].abstracto = true;
-		linea = linea.substring(0, linea.search('abstract')-1)+linea.substring(linea.search('abstract') + 'abstract'.length, linea.length);
+		linea = linea.substring(0, linea.search('abstract') - 1) + linea.substring(linea.search('abstract') + 'abstract'.length, linea.length);
 	}
-	// console.log(linea.substring(linea.search(' ')+1, linea.length));
-	//constructor
-	if ((b > 0 && m === 2) || m === 1) {
-		linea = linea.substring(linea.search(' ')+1, linea.length);		
-		cuadros[n][m][b].tipo = linea.substring(0, linea.search(' '));
-		
+
+	let palabras = linea.substring(0, linea.indexOf(((linea.includes('(') ? '(' : ';')))).split(' ');
+
+	cuadros[n][m][b].p = palabras[0];
+
+	cuadros[n][m][b].nombre = palabras[2];
+
+	//es constructor?
+	if (palabras.length === 2) {
+		cuadros[n][m][b].nombre = palabras[1];
+	} else {
+		cuadros[n][m][b].tipo = palabras[1];
+		cuadros[n][m][b].nombre = palabras[2];
 	}
-	
-	// cuadros[n][m][b].tipo = linea.substring(0, linea.search(' '));
-	if (m === 1 || linea.includes('()'))
-		cuadros[n][m][b].nombre = linea.substring(linea.search(' ')+1, linea.length-1);
-	else {
-		linea = linea.substring(linea.search(' ')+1, linea.length-1);
-		cuadros[n][m][b].nombre = linea.substring(0, ((m === 1) ? linea.length : linea.indexOf('(')));
-		
-		linea = linea.substring(linea.indexOf('(')+1, linea.length-1);
+
+	//es metodo con parametros?
+	if (m === 2 && !linea.includes('()')) {
+		linea = linea.substring(linea.indexOf('(') + 1, linea.indexOf(')'));
 		let aux = linea.replace(/,/g, '').split(' ');
 		let aux2 = '';
 
-		for(let i = 0; i < aux.length; i += 2){
-			aux2 += `${aux[i+1]}:${aux[i]}, `;
+		for (let i = 0; i < aux.length; i += 2) {
+			aux2 += `${aux[i + 1]}:${aux[i]}, `;
 		}
 
-		cuadros[n][m][b].parametros = aux2.substring(0, aux2.length-2);
+		cuadros[n][m][b].parametros = aux2.substring(0, aux2.length - 2);
 	}
-	
-	
+}
+
+function nuevaTabla(clase) {
+	let aux = `<table>
+		<tr>`;
+	if (!clase.interface){
+		aux += `<th>${(clase.abstracto) ? `<p class='abstract'>«abstract»</p>` : ''}
+			${((clase.padre) ? `<p class='padre'>extends:${clase.padre}</p>` : '')}`
+		if(clase.implementa) clase.implementa.forEach(inter => {
+			aux += `<p class='padre'>implementa:${inter}</p>` 	
+		});			
+	}
+	else {
+		aux += `<th><p class='abstract'>«interface»</p>`		
+	}
+	aux += `<p>${clase.nombre}</p>
+		</th>
+ 	</tr>`;
+
+	clase.propiedades.forEach((linea) => aux += `<tr><td>${linea}</td></tr>`);
+	aux += `<tr><td><hr></td></tr>`
+	clase.metodos.forEach((linea) => aux += `<tr><td>${linea}</td></tr>`);
+	aux += `</table>`;
+	return aux;	
 }
 
 function dibujarCuadro(objeto) {
-	let aux = `
-	<table class="default" >
-		<tr>
-			<th>${(objeto[0].abstracto) ? `<p class='abstract'>«abstract»</p>` : ''}
-			${((objeto[0].padre) ? `<p class='padre'>extends:${objeto[0].padre}</p>` : '')}
-			<p>${objeto[0].nombre}</p>
-			</th>
- 		</tr>`;  
-	objeto[1].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${linea.nombre}:${linea.tipo}</td></tr>`);
-	aux +=	`<tr><td><hr></td></tr>`
-	objeto[2].forEach((linea) => aux += `<tr><td>${(linea.p === 'private') ? '-' : '+'} ${(linea.abstracto) ? 'abstract ' : ''}${linea.nombre}${(linea.parametros) ? `(${linea.parametros})` : ''}${(linea.tipo) ? ':'+linea.tipo : ''}</td></tr>`);
-	aux +=`</table>`;
+	
+	// let aux = `
+	// <table>
+	// 	<tr>
+	// 		<th>${(objeto[0].abstracto) ? `<p class='abstract'>«abstract»</p>` : ''}
+	// 		${((objeto[0].padre) ? `<p class='padre'>extends:${objeto[0].padre}</p>` : '')}
+	// 		<p>${objeto[0].nombre}</p>
+	// 		</th>
+ 	// 	</tr>`;
+	objeto[0].propiedades = objeto[1].map((linea) => `${(linea.p === 'private') ? '-' : '+'} ${linea.nombre}:${linea.tipo}`);
+	objeto[0].metodos = objeto[2].map((linea) => `${(linea.p === 'private') ? '-' : '+'} ${(linea.abstracto) ? 'abstract ' : ''}${linea.nombre}${(linea.parametros) ? `(${linea.parametros})` : '()'}${(linea.tipo) ? ':' + linea.tipo : ''}`);
+	
+	let aux = nuevaTabla(objeto[0]);
 	document.querySelector('.tablas').innerHTML += aux;
 }
 
-function uml(parms) {
+function uml() {
 	cargar();
-	cuadros.forEach(cuadro => dibujarCuadro(cuadro));	
+	cuadros.forEach(cuadro => dibujarCuadro(cuadro));
 }
 
 function borrarT(linea) {
-	while (linea.search('\t') > 0){
+	while (linea.search('\t') > 0) {
 		linea = linea.substring(2, linea.length);
-		// console.log('1111');
 	}
-	// console.log(linea);
 	return linea;
 }
 
@@ -158,25 +180,25 @@ document.querySelector('#modelar').addEventListener('click', e => {
 	e.preventDefault();
 
 	if (document.querySelector('textarea').value === '') alert('Sin códigoooo');
-	else uml();	
+	else uml();
 });
 
 document.querySelector('#reset').addEventListener('click', e => {
 	e.preventDefault();
 
-	document.querySelector('textarea').value = '';	
+	document.querySelector('textarea').value = '';
 });
 
 document.querySelector('#borrarUML').addEventListener('click', e => {
 	e.preventDefault();
-	
+
 	document.querySelector('textarea').value = '';
-	document.querySelector('.tablas').innerHTML = '';	
+	document.querySelector('.tablas').innerHTML = '';
 });
 
 document.querySelector('#ej').addEventListener('click', e => {
 	e.preventDefault();
-	
+
 	document.querySelector('textarea').value = ej;
 });
 
@@ -290,12 +312,12 @@ public class CtaCte extends Cuenta{
 public class Nave extends Objeto{
 	private Double velocidad;
 	private int vida;
-	
+
 	public Nave(int x, int y, char direccion, Double 	velocidad){
 		super(x, y, direccion);
 		this.velocidad = velocidad;
 	}
-	
+
 	public void setVida(int vida){
 		this.vida = vida;
 	}
@@ -322,7 +344,7 @@ public class Asteroide{
 
 	public Asteroide(int x, int y, char direccion, int lesion){
 		super(x, y, direccion);
-		this.lesion = lesion;	
+		this.lesion = lesion;
 	}
 	// al pedo este mepa????
 	@Overrride

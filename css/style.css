@@ -6,9 +6,13 @@
 
 /*  */
 body{
+    background-color:lemonchiffon;
+}
+main{
     border: 2px solid rgb(88, 81, 81);
     margin: 1px;
-    border-radius: 5px;
+    border-radius: 5px;   
+    background-color:wheat;
 }
 .tab{
     width: 100%;
@@ -99,6 +103,7 @@ p{
 .divCuadros{
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start; 
     gap: 5px;
     /* width: 1vw; */
 }

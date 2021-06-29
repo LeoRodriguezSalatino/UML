@@ -1,79 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <title>LopiBot</title>   
+    <title>LopiBot</title>
 </head>
+
 <body>
-    <div class="tab">
-        <button class="tablinks active" onclick="openTab(event, 'Java')">Java a UML</button>
-        <button class="tablinks" onclick="openTab(event, 'Uml')">UML a Java</button>
-    </div>
-    <section class="tabJava">
-        <h2>Java a UML</h2>
-        <form action="">
-        <textarea name="codigo" id="codigo" cols="70" rows="20"></textarea>
-        <p>*COMING SOON: relaciones.</p>
-        <br>
-        <button id="reset">Limpiar</button>
-        <button id="modelar">Modelar</button>
-        <button id="borrarUML">Borrar UML</button>
-        <button id="ej">Ejemplo</button>
-    </form>
-    <section class="tablas"></section>
-    </section>
+    <h1>LopiBot</h1>
+    <main>      
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'Java')">Java a UML</button>
+            <button class="tablinks" onclick="openTab(event, 'Uml')">UML a Java</button>
+        </div>
+        <section class="tabJava">
+            <h2>Java a UML</h2>
+            <form action="">
+                <textarea name="codigo" id="codigo" cols="70" rows="20"></textarea>
+                <!-- <p>*COMING SOON: relaciones.</p> -->
+                <br>
+                <button id="reset">Limpiar</button>
+                <button id="modelar">Modelar</button>
+                <button id="borrarUML">Borrar UML</button>
+                <button id="ej">Ejemplo</button>
+            </form>
+            <section class="tablas"></section>
+        </section>
 
 
-    <section class="tabUml hide">
-        <h2>UML a Java</h2>
-        <div class="umls">
-        <article>
-            <!-- <form action=""> -->
-                <table>
-                    <tr>
-                        <th>
-                            <input class="block" type="text" name="nombreClase" id="nombreClase">
-                            <label class="labels" for="abstracta">
-                            <input class="block" type="checkbox" name="abstracta" id="abstracta">
-                            Abstract</label>
-                            <label class="block labels" for="herencia">Hereda de 
-                            <select name="herencia" id="herencia">
-                                <option value=""></option>
-                            </select></label>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td class="propiedad">
-                            <input type="text" name="propiedad" id="propiedad" class="in" placeholder="- numCta:Integer">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><hr></td>
-                    </tr>
-                    <tr>
-                        <td class="metodo">
-                            <input type="text" name="metodo" id="metodo" class="in" placeholder="+ depositar(monto:Double):void">
-                        </td>
-                    </tr>
-                </table>
-                <input type="button" class="agregarClase" value="Agregar" onclick="agregarClase()">
-                <input type="button" class="codear" value="Codear" onclick="codear()">
-                <input type="button" class="ejUml" value="Ejemplo" onclick="ejUml()">
-                <input type="button" class="borrar" value="Borrar" onclick="borrar()">
-            <!-- </form> -->
-        </article>
-        <div class="divCuadros"></div>
-        </div>
-        <div class="divCodigo">
-            <textarea name="codigoJava" id="codigoJava" cols="70" rows="20"></textarea>
-        </div>
-        
-    </section>
-    
+        <section class="tabUml hide">
+            <h2>UML a Java</h2>
+            <div class="umls">
+                <article>
+                    <!-- <form action="POST"> -->
+                    <table>
+                        <tr>
+                            <th>
+                                <input class="block" type="text" name="nombreClase" id="nombreClase">
+                                <div>
+                                <label class="labels" for="interface"> 
+                                    <input class="block" type="checkbox" name="interface" id="interface">
+                                    Interface</label>
+                                <label class="labels sinInterface" for="abstracta">      
+                                    <input class="block" type="checkbox" name="abstracta" id="abstracta">
+                                    Abstract</label>
+                                </div>
+                                <label class="block labels sinInterface" for="herencia">Hereda de
+                                    <select name="herencia" id="herencia">
+                                        <option value=""></option>
+                                    </select>
+                                </label>
+                                <div class="labels sinInterface interfaces">
+                                    <p>Interfaces</p>
+                                    <!-- <label for="checkbox"><input type="checkbox" name="interfaces" id="interfaces">a</label> -->
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="propiedad">
+                                <input type="text" name="propiedad" id="propiedad" class="in"
+                                    placeholder="- numCta:Integer">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metodo">
+                                <input type="text" name="metodo" id="metodo" class="in"
+                                    placeholder="+ depositar(monto:Double):void">
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="button" class="agregarClase" value="Agregar" onclick="agregarClase()">
+                    <input type="button" class="codear" value="Codear" onclick="codear()">
+                    <input type="button" class="ejUml" value="Ejemplo" onclick="ejUml()">
+                    <input type="button" class="borrar" value="Borrar" onclick="borrar()">
+                    <!-- </form> -->
+                </article>
+                <div class="divCuadros"></div>
+            </div>
+            <div class="divCodigo">
+                <textarea class="hide" name="codigoJava" id="codigoJava" cols="70" rows="20"></textarea>
+            </div>
+
+        </section>
+    </main>
     <script src="scripts/javatouml.js"></script>
     <script src="scripts/umltojava.js"></script>
 </body>
+
 </html>
