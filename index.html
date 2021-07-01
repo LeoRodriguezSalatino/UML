@@ -6,17 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
     <title>LopiBot</title>
 </head>
 
 <body>
     <h1>LopiBot</h1>
     <main>      
-        <div class="tab">
+        <div class="tab hide">
             <button class="tablinks active" onclick="openTab(event, 'Java')">Java a UML</button>
             <button class="tablinks" onclick="openTab(event, 'Uml')">UML a Java</button>
         </div>
-        <section class="tabJava">
+        <section class="tabJava hide">
             <h2>Java a UML</h2>
             <form action="">
                 <textarea name="codigo" id="codigo" cols="70" rows="20"></textarea>
@@ -31,15 +32,16 @@
         </section>
 
 
-        <section class="tabUml hide">
+        <section class="tabUml">
             <h2>UML a Java</h2>
+            <!-- <div class="flecha"></div> -->
             <div class="umls">
                 <article>
                     <!-- <form action="POST"> -->
                     <table>
                         <tr>
                             <th>
-                                <input class="block" type="text" name="nombreClase" id="nombreClase">
+                                <input class="block" type="text" name="nombreClase" id="nombreClase" placeholder="NombreClase">
                                 <div>
                                 <label class="labels" for="interface"> 
                                     <input class="block" type="checkbox" name="interface" id="interface">
@@ -81,6 +83,9 @@
                     <input type="button" class="codear" value="Codear" onclick="codear()">
                     <input type="button" class="ejUml" value="Ejemplo" onclick="ejUml()">
                     <input type="button" class="borrar" value="Borrar" onclick="borrar()">
+                    <br>
+                    <input type="button" class="exportar" value="Exportar a Diagrams" onclick="toDiagramsText()">
+                    <p>Para exportar a Diagrams: copiar el texto, <br>luego en Diagrams ir a <br>Arrage -> Insert -> Advanced -> From Text.. y pegar el texto ahi.</p>
                     <!-- </form> -->
                 </article>
                 <div class="divCuadros"></div>
@@ -93,6 +98,7 @@
     </main>
     <script src="scripts/javatouml.js"></script>
     <script src="scripts/umltojava.js"></script>
+    <script src="scripts/drag.js"></script>
 </body>
 
 </html>

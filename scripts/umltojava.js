@@ -1,5 +1,5 @@
 // try{
-    // document.querySelector('.abc').addEventListener('submit', e => e.preventDefault());
+// document.querySelector('.abc').addEventListener('submit', e => e.preventDefault());
 function borrarRow(e) {
     // console.log(e);
     e.target.parentNode.parentNode.removeChild(e.target.parentNode);
@@ -8,16 +8,30 @@ function borrarRow(e) {
 
 function modificarRow(e) {
     // e.preventDefault();
-    // console.log(e);
-    // console.log(e.target.parentNode.firstChild);
-    // document.querySelector('textarea').value = ej;
+
+    document.querySelector('#'+e.target.parentNode.classList[0]).value = e.target.innerText;
+    e.target.parentNode.removeChild(e.target);
 };
 
 function agregar(e) {
     if (e.key === "Enter") {
-        let linea = e.target.value;
+        let linea = e.target.value.trim();
+        // console.log(linea);
         //comprobacion errores
-            if (linea[1] != ' ') linea = linea[0]+' '+linea.substring(1, linea.length);
+        if (linea[1] != ' ') linea = linea[0] + ' ' + linea.substring(1);
+
+        while (linea.includes(' :') || linea.includes(': ')) {
+            if (linea.includes(' :')) {
+                linea = linea.substring(0, linea.search(' :')) + linea.substring(linea.search(' :')+1);
+            }
+            if (linea.includes(': ')) {
+                linea = linea.substring(0, linea.search(': ') + 1) + linea.substring(linea.search(': ') + 2, linea.length);
+            }
+        }
+
+        if (linea.includes(' (')){
+            linea = linea.substring(0, linea.indexOf(' (')) + linea.substring(linea.indexOf('('));
+        }
         //
 
         let donde = e.target.id;
@@ -25,7 +39,7 @@ function agregar(e) {
         let padre = document.querySelector('.' + donde);
 
         padre.innerHTML +=
-            `<p class='${(donde === 'metodo') ? 'metodos' : 'propiedades'}' ondblclick="modificarRow()">${linea}<input type="button" class='borrarRow ${donde}' value="X"></p>`;
+            `<p class='${(donde === 'metodo') ? 'metodos' : 'propiedades'}'>${linea}<input type="button" class='borrarRow ${donde}' value="X"></p>`;
 
         document.getElementById(donde).addEventListener('keypress', (e) => {
             agregar(e);
@@ -34,9 +48,9 @@ function agregar(e) {
         document.querySelectorAll('.borrarRow.' + donde).forEach(boton => {
             boton.addEventListener('click', borrarRow);
         });
-        // document.querySelectorAll('td.'+donde+' p').forEach(p => {
-        // 	p.addEventListener('dblclick', modificarRow);
-        // });
+        document.querySelectorAll('td.'+donde+' p').forEach(p => {
+        	p.addEventListener('dblclick', modificarRow);
+        });
     }
 };
 
@@ -50,6 +64,8 @@ function listeners() {
     })
 }
 
+
+let datosDivCuadros = '';
 listeners();
 let cuadros2 = [];
 let interfaces = [];
@@ -63,7 +79,7 @@ function agregarClase(e) {
     //             ${((document.querySelector('#herencia').value != '') ? `<p class='padre'>extends:${document.querySelector('#herencia').value}</p>` : '')}
     //             <p>${document.querySelector('#nombreClase').value}</p>
     //         </tr>`;
-    
+
     cuadros2.push(new Object());
     let n = cuadros2.length - 1;
     cuadros2[n].nombre = document.querySelector('#nombreClase').value;
@@ -73,11 +89,11 @@ function agregarClase(e) {
     //cambiar
     let inter = document.querySelectorAll('#interfaces')
     // console.log(inter);
-    if(inter.length > 0) {
+    if (inter.length > 0) {
         cuadros2[n].implementa = [];
         inter.forEach(check => {
-            if(check.checked) 
-                cuadros2[n].implementa.push(cuadros2[check.value].nombre);    
+            if (check.checked)
+                cuadros2[n].implementa.push(cuadros2[check.value].nombre);
         });
         inter.forEach(e => e.checked = false)
     }
@@ -102,15 +118,28 @@ function agregarClase(e) {
 
     document.querySelector('.divCuadros').innerHTML += aux;
     document.querySelector('select').innerHTML += `<option value="${cuadros2[n].nombre}">${cuadros2[n].nombre}</option>`;
-    if(cuadros2[n].interface){
-        document.querySelector('.interfaces').innerHTML += 
-        `<label for="checkbox"><input type="checkbox" name="interfaces" id="interfaces" value="${n}" >${cuadros2[n].nombre}</label>`;
+    if (cuadros2[n].interface) {
+        document.querySelector('.interfaces').innerHTML +=
+            `<label for="checkbox"><input type="checkbox" name="interfaces" id="interfaces" value="${n}" >${cuadros2[n].nombre}</label>`;
         let m = document.querySelectorAll('#interfaces');
-        m[m.length-1].addEventListener('click', e => {implementarInterface(e)});
+        m[m.length - 1].addEventListener('click', e => { implementarInterface(e) });
         // interfaces.push(new Object());
         // interfaces[interfaces.length].nombre = cuadros2[n].nombr;
         // interfaces[interfaces.length].id = n;
     }
+    let t = document.querySelectorAll('.dragable');
+    console.log(t[t.length-1]);
+    
+    // datosDivCuadros = document.querySelector('.divCuadros').getBoundingClientRect();
+    document.querySelectorAll('.dragable').forEach(e => e.addEventListener('dragstart', e => {
+        e.target.style.left = (e.clientX-179)+'px';
+        e.target.style.top = (e.clientY-11.125)+'px';
+    }));
+
+    document.querySelectorAll('.dragable').forEach(e => e.addEventListener('dragend', e => {
+        e.target.style.left = (e.clientX-179)+'px';
+        e.target.style.top = (e.clientY-11.125)+'px';
+    }));
 
     //cambiar a func
     document.querySelectorAll('.sinInterface').forEach(nodo => nodo.classList.remove('hide'));
@@ -137,7 +166,7 @@ function codear(e) {
 }
 
 function codearClase(c) {
-    let aux = `public ${(c.abstracta) ? 'abstract ' : ''}${(interface) ? 'interface' : 'class'} ${c.nombre}${(c.padre != '') ? ' extends ' + c.padre : ''}${(c.implementa) ? ' implements '+c.implementa[0] : ''}{`;
+    let aux = `public ${(c.abstracta) ? 'abstract ' : ''}${(interface) ? 'interface' : 'class'} ${c.nombre}${(c.padre != '') ? ' extends ' + c.padre : ''}${(c.implementa) ? ' implements ' + c.implementa[0] : ''}{`;
     let aux2 = '';
     let aux3 = '';
     let aux4 = '';
@@ -157,6 +186,7 @@ function codearClase(c) {
 
     //setters y getters
     aux += aux4;
+
     for (const m of c.metodos) {
         aux += codearMetodo(m);
     }
@@ -177,22 +207,25 @@ function codearPropiedad(p, inter) {
     let aux3 = '';
 
     //si no es interface, hago constructora
-    if(!inter){
-    //parametros constructora
-    aux2 = p.substring(p.search(':') + 1, p.length) + ' ' + nombre + ', ';
-    //definicion constructora
-    aux3 = '\n\t\tthis.' + nombre + ' = ' + nombre + ';';
+    if (!inter) {
+        //parametros constructora
+        aux2 = p.substring(p.search(':') + 1, p.length) + ' ' + nombre + ', ';
+        //definicion constructora
+        aux3 = '\n\t\tthis.' + nombre + ' = ' + nombre + ';';
     }
 
     let aux4 = `\n\tpublic void set${nombre[0].toUpperCase() + nombre.slice(1)}(${p.substring(p.search(':') + 1, p.length) + ' ' + nombre + '){'}`;
-    
-    if(!inter){
+
+    if (!inter) {
         aux4 += `\n\t\tthis.${nombre} = ${nombre};\n\t}`;
     }
-        aux4 += `\n\tpublic ${p.substring(p.search(':') + 1, p.length)} get${nombre[0].toUpperCase() + nombre.slice(1)}(){`;
-    if(!inter){
+    else aux4 += '}';
+
+    aux4 += `\n\tpublic ${p.substring(p.search(':') + 1, p.length)} get${nombre[0].toUpperCase() + nombre.slice(1)}(){`;
+    if (!inter) {
         aux4 += `\n\t\treturn ${nombre};\n\t}`;
     }
+    else aux4 += '}';
 
     return [aux, aux2, aux3, aux4]
 }
@@ -248,7 +281,7 @@ function borrar(e) {
     document.querySelector('#codigoJava').innerHTML = '';
     document.querySelector('#codigoJava').classList.add('hide');
     document.querySelector('.divCuadros').innerHTML = '';
-    document.querySelector('select').innerHTML = '<option value=""></option>'; 
+    document.querySelector('select').innerHTML = '<option value=""></option>';
     document.querySelector('.interfaces').innerHTML = '';
 }
 

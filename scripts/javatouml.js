@@ -86,7 +86,7 @@ function propiedad(linea, m) {
 
 	//es metodo abstracto?
 	if (m === 2 && linea.includes('abstract')) {
-		cuadros[n][m][b].abstracto = true;
+		cuadros[n][m][b].abstracta = true;
 		linea = linea.substring(0, linea.search('abstract') - 1) + linea.substring(linea.search('abstract') + 'abstract'.length, linea.length);
 	}
 
@@ -119,10 +119,15 @@ function propiedad(linea, m) {
 }
 
 function nuevaTabla(clase) {
-	let aux = `<table>
+	// <tr><th><i class="fas fa-plus-circle ptoT"></i>
+	// <i class="fas fa-plus-circle ptoL"></i>
+	// <i class="fas fa-plus-circle ptoR"></i>
+	// <i class="fas fa-plus-circle ptoB"></i></tr></th>
+	let aux = `<table class="dragable" draggable="true">
+	
 		<tr>`;
 	if (!clase.interface){
-		aux += `<th>${(clase.abstracto) ? `<p class='abstract'>«abstract»</p>` : ''}
+		aux += `<th>${(clase.abstracta) ? `<p class='abstract'>«abstract»</p>` : ''}
 			${((clase.padre) ? `<p class='padre'>extends:${clase.padre}</p>` : '')}`
 		if(clase.implementa) clase.implementa.forEach(inter => {
 			aux += `<p class='padre'>implementa:${inter}</p>` 	

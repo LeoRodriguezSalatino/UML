@@ -42,6 +42,7 @@ main{
 /*  */
 h2{
     margin: 10px;
+    content: "\f055";
 }
 section{
     padding: 5px;
@@ -93,12 +94,17 @@ p{
     font-size: 13px;
     text-align: right;
 }
-
+/* .dragable{
+    position: absolute;   
+} */
 
 /* uml a java */
 .umls{
     display: flex;
     gap: 5px;   
+}
+.borrarRow{
+    margin-left: 5px;
 }
 .divCuadros{
     display: flex;
@@ -109,4 +115,37 @@ p{
 }
 input[type=checkbox]{
     display: inline-block;
+}
+input[type=text]{
+    border-radius: 10px;
+    height: 25px;
+    border: 1px solid black;
+}
+/* drags */
+.ptoT, .ptoL, .ptoR, .ptoB{
+    position: relative;
+    /* border: 1px solid black; */
+    color:chartreuse;
+}
+.ptoT{
+    top: -13px;   
+}
+.ptoL{
+    left: -150px;   
+}
+.ptoR{
+    right: -150px;   
+}
+.ptoB{
+    bottom: -13px;   
+}
+.flecha{
+    /* top: 10px;
+    left: 10px; */
+    height: 20px;
+    width: 10px;
+    /* background-color: black; */
+    border-bottom: 10px solid black;
+     border-left: 5px solid transparent;
+     border-right: 5px solid transparent; 
 }
