@@ -9,7 +9,7 @@ function borrarRow(e) {
 function modificarRow(e) {
     // e.preventDefault();
 
-    document.querySelector('#'+e.target.parentNode.classList[0]).value = e.target.innerText;
+    document.querySelector('#' + e.target.parentNode.classList[0]).value = e.target.innerText;
     e.target.parentNode.removeChild(e.target);
 };
 
@@ -22,14 +22,14 @@ function agregar(e) {
 
         while (linea.includes(' :') || linea.includes(': ')) {
             if (linea.includes(' :')) {
-                linea = linea.substring(0, linea.search(' :')) + linea.substring(linea.search(' :')+1);
+                linea = linea.substring(0, linea.search(' :')) + linea.substring(linea.search(' :') + 1);
             }
             if (linea.includes(': ')) {
                 linea = linea.substring(0, linea.search(': ') + 1) + linea.substring(linea.search(': ') + 2, linea.length);
             }
         }
 
-        if (linea.includes(' (')){
+        if (linea.includes(' (')) {
             linea = linea.substring(0, linea.indexOf(' (')) + linea.substring(linea.indexOf('('));
         }
         //
@@ -48,8 +48,8 @@ function agregar(e) {
         document.querySelectorAll('.borrarRow.' + donde).forEach(boton => {
             boton.addEventListener('click', borrarRow);
         });
-        document.querySelectorAll('td.'+donde+' p').forEach(p => {
-        	p.addEventListener('dblclick', modificarRow);
+        document.querySelectorAll('td.' + donde + ' p').forEach(p => {
+            p.addEventListener('dblclick', modificarRow);
         });
     }
 };
@@ -72,13 +72,6 @@ let interfaces = [];
 
 function agregarClase(e) {
     // e.preventDefault();
-    // let aux = `<article>
-    //         <table>
-    //         <tr>
-    //             <th>${(document.querySelector('#abstracta').checked) ? `<p class='abstract'>«abstract»</p>` : ''}
-    //             ${((document.querySelector('#herencia').value != '') ? `<p class='padre'>extends:${document.querySelector('#herencia').value}</p>` : '')}
-    //             <p>${document.querySelector('#nombreClase').value}</p>
-    //         </tr>`;
 
     cuadros2.push(new Object());
     let n = cuadros2.length - 1;
@@ -89,13 +82,18 @@ function agregarClase(e) {
     //cambiar
     let inter = document.querySelectorAll('#interfaces')
     // console.log(inter);
+
     if (inter.length > 0) {
-        cuadros2[n].implementa = [];
-        inter.forEach(check => {
-            if (check.checked)
-                cuadros2[n].implementa.push(cuadros2[check.value].nombre);
-        });
-        inter.forEach(e => e.checked = false)
+        let bool = false;
+        inter.forEach(e => { if (e.checked) bool = true });
+        if (bool) {
+            cuadros2[n].implementa = [];
+            inter.forEach(check => {
+                if (check.checked)
+                    cuadros2[n].implementa.push(cuadros2[check.value].nombre);
+            });
+            inter.forEach(e => e.checked = false);
+        }
     }
 
     cuadros2[n].propiedades = [];
@@ -117,28 +115,32 @@ function agregarClase(e) {
     let aux = nuevaTabla(cuadros2[n]);
 
     document.querySelector('.divCuadros').innerHTML += aux;
-    document.querySelector('select').innerHTML += `<option value="${cuadros2[n].nombre}">${cuadros2[n].nombre}</option>`;
-    if (cuadros2[n].interface) {
+
+    //si no es interface, lo agrego al select de herencia, sino al checkbox de interfaces
+    if (!cuadros2[n].interface) {
+        document.querySelector('select').innerHTML += `<option value="${cuadros2[n].nombre}">${cuadros2[n].nombre}</option>`;
+    }
+    else {
         document.querySelector('.interfaces').innerHTML +=
             `<label for="checkbox"><input type="checkbox" name="interfaces" id="interfaces" value="${n}" >${cuadros2[n].nombre}</label>`;
         let m = document.querySelectorAll('#interfaces');
-        m[m.length - 1].addEventListener('click', e => { implementarInterface(e) });
+        m.forEach(e => e.addEventListener('click', e => { implementarInterface(e) }));
         // interfaces.push(new Object());
         // interfaces[interfaces.length].nombre = cuadros2[n].nombr;
         // interfaces[interfaces.length].id = n;
     }
     let t = document.querySelectorAll('.dragable');
-    console.log(t[t.length-1]);
-    
+    // console.log(t[t.length-1]);
+
     // datosDivCuadros = document.querySelector('.divCuadros').getBoundingClientRect();
     document.querySelectorAll('.dragable').forEach(e => e.addEventListener('dragstart', e => {
-        e.target.style.left = (e.clientX-179)+'px';
-        e.target.style.top = (e.clientY-11.125)+'px';
+        e.target.style.left = (e.clientX - 179) + 'px';
+        e.target.style.top = (e.clientY - 11.125) + 'px';
     }));
 
     document.querySelectorAll('.dragable').forEach(e => e.addEventListener('dragend', e => {
-        e.target.style.left = (e.clientX-179)+'px';
-        e.target.style.top = (e.clientY-11.125)+'px';
+        e.target.style.left = (e.clientX - 179) + 'px';
+        e.target.style.top = (e.clientY - 11.125) + 'px';
     }));
 
     //cambiar a func
@@ -166,7 +168,14 @@ function codear(e) {
 }
 
 function codearClase(c) {
-    let aux = `public ${(c.abstracta) ? 'abstract ' : ''}${(interface) ? 'interface' : 'class'} ${c.nombre}${(c.padre != '') ? ' extends ' + c.padre : ''}${(c.implementa) ? ' implements ' + c.implementa[0] : ''}{`;
+    let implementa = '';
+    if (c.implementa) {
+        c.implementa.forEach(element => {
+            implementa += element + ', ';
+        });
+        implementa = implementa.substring(0, implementa.length - 2);
+    }
+    let aux = `public ${(c.abstracta) ? 'abstract ' : ''}${(c.interface) ? 'interface' : 'class'} ${c.nombre}${(c.padre != '') ? ' extends ' + c.padre : ''}${(c.implementa) ? ` implements ${implementa}` : ''}{`;
     let aux2 = '';
     let aux3 = '';
     let aux4 = '';
@@ -182,7 +191,7 @@ function codearClase(c) {
 
     //si no es interface, hago constructora
     if (!c.interface)
-        aux += '\n\tpublic ' + c.nombre + '(' + aux2.substring(0, aux2.length - 2) + '){' + aux3 + '\n\t}';
+        aux += '\n\tpublic ' + c.nombre + '(' + aux2.substring(0, aux2.length - 2) + '){' + ((c.padre) ? '\n\t\tsuper();' : '') + aux3 + '\n\t}';
 
     //setters y getters
     aux += aux4;
@@ -252,13 +261,15 @@ document.querySelector('#interface').addEventListener('click', e => {
 function implementarInterface(e) {
     // e.preventDefault();
     // console.log(e);
-
+    if (!e.target.checked) return
     let n = e.target.value;
     document.querySelector('#propiedad').value = cuadros2[n].propiedades;
     agregar({ target: document.querySelector('#propiedad'), key: 'Enter' });
 
     document.querySelector('#metodo').value = cuadros2[n].metodos;
     agregar({ target: document.querySelector('#metodo'), key: 'Enter' });
+
+    e.target.addEventListener()
 }
 
 // document.querySelector('.ejUml').addEventListener('click', ejUml);
