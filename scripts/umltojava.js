@@ -189,10 +189,21 @@ function codearClase(c) {
         aux4 += a4;
     }
 
-    //si no es interface, hago constructora
-    if (!c.interface)
-        aux += '\n\tpublic ' + c.nombre + '(' + aux2.substring(0, aux2.length - 2) + '){' + ((c.padre) ? '\n\t\tsuper();' : '') + aux3 + '\n\t}';
+    let codigo = document.querySelector('#codigoJava');
 
+    //si no es interface, hago constructora
+    if (!c.interface) {
+        let auxPadre = '';
+        let auxPadreSuper = '';
+        //tiene padre? si tiene busco los parametros de su cosntructora
+        if (c.padre) {
+            auxPadre = codigo.innerHTML.substring(codigo.innerHTML.search('public ' + c.padre), codigo.innerHTML.length);
+            auxPadre = auxPadre.substring(auxPadre.indexOf('(')+1, auxPadre.indexOf(')'));
+            auxPadreSuper = '\n\t\tsuper('+auxPadre+');';
+            auxPadre += ', ';
+        }
+        aux += '\n\tpublic ' + c.nombre + '('+auxPadre + aux2.substring(0, aux2.length - 2) + '){' + auxPadreSuper + aux3 + '\n\t}';
+    }
     //setters y getters
     aux += aux4;
 
@@ -203,7 +214,7 @@ function codearClase(c) {
     // aux += c.metodos.reduce((m, acum) => acum + codearPropiedad(m));
     aux += '\n}\n\n';
     // console.log(aux);
-    let codigo = document.querySelector('#codigoJava');
+
     codigo.innerHTML += aux;
 }
 
