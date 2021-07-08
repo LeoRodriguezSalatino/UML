@@ -1,6 +1,6 @@
 // try{
 // document.querySelector('.abc').addEventListener('submit', e => e.preventDefault());
-function borrarRow(e) {
+function borrarRow2(e) {
     // console.log(e);
     e.target.parentNode.parentNode.removeChild(e.target.parentNode);
     document.querySelector('textarea').value = ej;
@@ -46,7 +46,7 @@ function agregar(e) {
         })
         // listeners();
         document.querySelectorAll('.borrarRow.' + donde).forEach(boton => {
-            boton.addEventListener('click', borrarRow);
+            boton.addEventListener('click', borrarRow2);
         });
         document.querySelectorAll('td.' + donde + ' p').forEach(p => {
             p.addEventListener('dblclick', modificarRow);
@@ -306,5 +306,7 @@ function borrar(e) {
     document.querySelector('select').innerHTML = '<option value=""></option>';
     document.querySelector('.interfaces').innerHTML = '';
 }
+
+nuevaTablaa();
 
     // }catch (error) {console.error(error);}

@@ -12,7 +12,8 @@ main{
     border: 2px solid rgb(88, 81, 81);
     margin: 1px;
     border-radius: 5px;   
-    background-color:wheat;
+    /* background-color:wheat; */
+    background-image: url(/fondo.png);
 }
 .tab{
     width: 100%;
@@ -60,7 +61,7 @@ table{
     /* table-layout: fixed; */
     width: 300px;
     border-radius: 10px;
-    background-color: white;
+    /* background-color: white; */
 }
 th{
     display: flex;
@@ -94,9 +95,7 @@ p{
     font-size: 13px;
     text-align: right;
 }
-/* .dragable{
-    position: absolute;   
-} */
+
 
 /* uml a java */
 .umls{
@@ -111,7 +110,9 @@ p{
     flex-wrap: wrap;
     align-items: flex-start; 
     gap: 5px;
-    /* width: 1vw; */
+    /* height: 1000px;
+    width: 1000px; */
+    
 }
 input[type=checkbox]{
     display: inline-block;
@@ -121,31 +122,25 @@ input[type=text]{
     height: 25px;
     border: 1px solid black;
 }
-/* drags */
-.ptoT, .ptoL, .ptoR, .ptoB{
-    position: relative;
-    /* border: 1px solid black; */
-    color:chartreuse;
+
+.inputSinStyle{
+    width: 100%;
+    border-radius: 0px !important;
+    border: none !important;
+    /* outline: none !important; */
+    background-color: rgba(0, 0, 0, 0);
 }
-.ptoT{
-    top: -13px;   
+.botonesMas{
+    display: flex;
+    justify-content: flex-end;
 }
-.ptoL{
-    left: -150px;   
+.borrarInput{
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
 }
-.ptoR{
-    right: -150px;   
+.divRow{
+    display: flex;
 }
-.ptoB{
-    bottom: -13px;   
-}
-.flecha{
-    /* top: 10px;
-    left: 10px; */
-    height: 20px;
-    width: 10px;
-    /* background-color: black; */
-    border-bottom: 10px solid black;
-     border-left: 5px solid transparent;
-     border-right: 5px solid transparent; 
+.dragable{
+    position: absolute;   
 }
